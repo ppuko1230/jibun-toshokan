@@ -1,0 +1,251 @@
+@import "../materials/design-kit/colors/palette.css";
+@import "./pdf-book.css";
+@import "./usability-review.css";
+
+/* Approved book design shared by the normal app and independent review builds. */
+@font-face{font-family:'Yohaku BIZ';src:url('/design-kit/fonts/BIZUDPGothic-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Yohaku BIZ';src:url('/design-kit/fonts/BIZUDPGothic-Bold.ttf') format('truetype');font-weight:600 900;font-display:swap}
+
+html.yohaku-design{
+  --sans:'Yohaku BIZ','Yu Gothic UI',Meiryo,sans-serif;
+  --serif:'Yohaku BIZ','Yu Gothic UI',Meiryo,sans-serif;
+  --bg:#f7f7f2;--paper:#fffefa;--ink:var(--sage12);--muted:var(--sage11);
+  --green:var(--jade12);--pale:var(--jade3);--border:var(--sand6);--gold:var(--amber4);
+  --surface:var(--paper);--line:var(--sand6);
+  --ui-shadow:0 1px 2px #1b352a06,0 4px 16px #1b352a03;
+}
+html.yohaku-design:not([data-text-size="large"]){--control-size:15px;--reading-size:17px;--detail-size:13px}
+html.yohaku-design body{background:var(--bg);font-family:var(--sans);letter-spacing:.01em}
+html.yohaku-design ::selection{background:var(--jade5);color:var(--jade12)}
+html.yohaku-design :where(button,a,input,select,textarea,summary):focus-visible{outline:2px solid var(--jade11);outline-offset:3px}
+html.yohaku-design :where(button,a,input,select,textarea){transition:background-color .15s,border-color .15s,box-shadow .15s}
+html.yohaku-design .refined svg{stroke-width:1.75}
+html.yohaku-design .refined h1{font-size:30px;font-weight:700;letter-spacing:.015em;line-height:1.5}
+html.yohaku-design .refined h2{font-weight:700}
+
+/* Button variants follow shadcn/ui's primary, outline and ghost hierarchy. */
+html.yohaku-design .refined .button{
+  min-height:42px;padding:10px 16px;border-radius:8px;border:1px solid var(--sand7);
+  background:var(--paper);color:var(--ink);font-weight:600;font-size:var(--control-size);
+  box-shadow:0 1px 2px #1b352a05;gap:8px;line-height:1.5;
+}
+html.yohaku-design .refined .button:hover:not(:disabled){background:var(--sand3);border-color:var(--sand8)}
+html.yohaku-design .refined .button.primary{background:var(--jade12);border-color:var(--jade12);color:#fff}
+html.yohaku-design .refined .button.primary:hover:not(:disabled){background:#264d3e;border-color:#264d3e}
+html.yohaku-design .refined .button.small{min-height:36px;font-size:var(--detail-size);padding:8px 12px;line-height:1.5}
+html.yohaku-design .refined .icon-button{border-radius:8px;color:var(--sage11);background:transparent}
+html.yohaku-design .refined .icon-button:hover:not(:disabled){background:var(--sage3);color:var(--jade12)}
+html.yohaku-design .refined .text-button{color:var(--jade11);font-weight:400;border-radius:6px}
+html.yohaku-design .refined .text-button:hover:not(:disabled){background:var(--jade3);color:var(--jade12)}
+html.yohaku-design .refined .memo-delete{color:var(--tomato11)}
+html.yohaku-design .refined .memo-delete:hover{background:var(--tomato3);color:var(--tomato12)}
+html.yohaku-design .refined .button.danger{color:var(--tomato11);background:var(--tomato2);border-color:var(--tomato7)}
+html.yohaku-design .refined :where(input:not([type="range"]):not([type="checkbox"]),textarea,select){border-radius:8px}
+html.yohaku-design .refined :where(input,textarea,select)::placeholder{color:var(--sage11);opacity:.85}
+html.yohaku-design .refined :where(input[type="checkbox"],input[type="range"]){accent-color:var(--jade11)}
+
+html.yohaku-design .refined .sidebar{width:232px;height:100dvh;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:28px 18px 20px;background:#eff2eb;border-right:1px solid #e1e7dd}
+html.yohaku-design .refined .sidebar>*{flex-shrink:0}
+html.yohaku-design .refined .main-shell{margin-left:232px}
+html.yohaku-design .refined .brand{margin:0 10px 18px;gap:12px}
+html.yohaku-design .brand>span:last-child{font-family:'Yu Mincho','Noto Serif JP',serif;font-weight:600;font-size:31px}
+html.yohaku-design .refined .brand small{font:400 11px/1.7 var(--sans);letter-spacing:.12em;color:var(--sage11);margin-top:2px}
+html.yohaku-design .brand-symbol{width:40px;height:46px;border-radius:10px;background:var(--jade12);color:#fff;box-shadow:0 2px 3px #1d3b3114}
+html.yohaku-design .design-review-badge{display:block;align-self:flex-start;margin:0 10px 30px;padding:3px 9px;border:1px solid var(--sage7);color:var(--sage11);font-size:11px;line-height:1.6;border-radius:5px;background:#ffffff70}
+html.yohaku-design .nav-section-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--sage11);margin:0 13px 10px}
+html.yohaku-design .refined .nav-item{min-height:44px;margin-bottom:5px;padding:11px 13px;border-radius:8px;gap:12px;color:var(--sage11);font-size:calc(var(--control-size) - 1px);line-height:1.5;font-weight:400}
+html.yohaku-design .refined .nav-item.active{color:var(--jade12);font-weight:700;background:#dce8db;box-shadow:0 1px 2px #203c3005}
+html.yohaku-design .refined .nav-item:hover{color:var(--jade12);background:#e3eade}
+html.yohaku-design .refined .nav-item:nth-child(4){margin-bottom:26px}
+html.yohaku-design .refined .rail-bottom{padding-top:20px;border-top:1px solid #dce3d7;margin-top:auto}
+html.yohaku-design .design-review-caption{color:var(--sage11);font-size:11px;margin:0 10px 6px}
+html.yohaku-design .local-caption{font-size:11px;color:var(--sage11);margin:0 10px 12px;letter-spacing:0}
+html.yohaku-design .settings-button{font-size:13px;min-height:40px;padding:8px 12px;color:var(--sage11)}
+html.yohaku-design .refined .workspace{max-width:1280px;padding:38px 40px 60px}
+html.yohaku-design .refined .page-heading{margin-bottom:24px;align-items:center}
+html.yohaku-design .library-lead{font-size:13px;font-weight:400;color:var(--muted);margin-top:6px;line-height:1.8}
+html.yohaku-design .refined .search-box{height:54px;padding:0 8px 0 18px;margin-bottom:28px;border:1px solid var(--sand7);border-radius:11px;background:var(--paper);box-shadow:var(--ui-shadow);gap:12px}
+html.yohaku-design .refined .search-box:focus-within{border-color:var(--jade8);box-shadow:0 0 0 3px var(--jade3)}
+html.yohaku-design .refined .search-box input:focus-visible{outline:none;box-shadow:none}
+html.yohaku-design .refined .search-box input{font-size:calc(var(--control-size) - 1px)}
+html.yohaku-design .refined .search-box input::placeholder{font-size:calc(var(--control-size) - 1px)}
+html.yohaku-design .refined .search-box>svg{width:19px;height:19px;color:var(--sage11)}
+html.yohaku-design .refined .search-box kbd{font:11px/1.5 var(--sans);padding:3px 6px;border:1px solid var(--sand6);border-bottom-width:2px;border-radius:5px;color:var(--sage11);background:var(--sand2)}
+html.yohaku-design .refined .search-submit{width:36px;height:36px;border-radius:7px;background:var(--sage3);color:var(--jade12)}
+html.yohaku-design .refined .section-top{margin:24px 0 14px}
+html.yohaku-design .refined .section-top h2{font-size:15px}
+html.yohaku-design .refined .count-pill{font-size:11px;font-weight:400;padding:3px 8px;border-radius:5px;color:var(--sage11);background:var(--sand4);margin-left:6px}
+
+/* Real first-page thumbnails, never invented covers. */
+html.yohaku-design .design-books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border:0;border-radius:0;background:none;overflow:visible}
+html.yohaku-design .refined .design-books .textbook-row{position:relative;display:grid;grid-template-columns:76px minmax(0,1fr);grid-template-rows:1fr auto;column-gap:18px;row-gap:12px;align-items:start;min-height:170px;padding:18px 20px;border:1px solid var(--sand6);border-radius:12px;background:var(--paper);box-shadow:var(--ui-shadow)}
+html.yohaku-design .design-books .textbook-row:hover{border-color:var(--sage8);box-shadow:0 3px 12px #1b352a09}
+html.yohaku-design .book-cover{grid-column:1;grid-row:1/3;display:flex;align-items:center;justify-content:center;width:76px;min-height:106px;align-self:center;color:var(--sage9)}
+html.yohaku-design .book-cover img{width:76px;height:106px;object-fit:contain;object-position:center;filter:drop-shadow(0 2px 3px #1d3b311a);border-radius:2px;background:#fff}
+html.yohaku-design .design-books .textbook-info{grid-column:2;grid-row:1;padding-right:22px;min-width:0}
+html.yohaku-design .design-books .textbook-info h3{font-size:calc(var(--reading-size) - 2px);line-height:1.65;font-weight:700;overflow-wrap:anywhere}
+html.yohaku-design .design-books .textbook-info p{font-size:calc(var(--detail-size) - 1px);margin-top:5px;color:var(--sage11)}
+html.yohaku-design .design-books .textbook-row>.button{grid-column:2;grid-row:2;justify-self:start;margin:0;color:var(--jade12);border-color:var(--jade6);background:var(--jade2);font-size:12px;min-height:34px;padding:7px 11px}
+html.yohaku-design .design-books .textbook-row>.button:hover{background:var(--jade3);border-color:var(--jade8)}
+html.yohaku-design .design-books .textbook-row>.book-delete{position:absolute;top:11px;right:10px;min-width:28px;min-height:28px;width:28px;height:28px;color:var(--sage11);border-radius:6px}
+html.yohaku-design .design-books .textbook-row>.book-delete svg{width:15px;height:15px}
+html.yohaku-design .design-books .book-delete:hover{background:var(--tomato3);color:var(--tomato11)}
+html.yohaku-design .refined .continue-card{border:0;border-radius:12px;background:var(--jade12);color:#fff;padding:20px 23px;box-shadow:0 4px 12px #1b352a0d;margin-bottom:25px;gap:18px}
+html.yohaku-design .continue-card>svg:first-child{width:22px;height:22px;color:#d3ead7}
+html.yohaku-design .continue-card small{font-size:11px;color:#d3ead7;margin-bottom:3px}
+html.yohaku-design .continue-card strong{font-size:17px;line-height:1.65}
+html.yohaku-design .continue-card>span>span{font-size:12px;color:#d3ead7}
+html.yohaku-design .continue-card:hover{background:#264d3e}
+html.yohaku-design .bookmark-disclosure{font-size:14px;padding-block:15px}
+html.yohaku-design .bookmark-disclosure>span{font-size:12px}
+
+html.yohaku-design .refined .search-filters{gap:16px}
+html.yohaku-design .refined .search-filters label{font-size:12px;color:var(--sage11)}
+html.yohaku-design .refined .search-filters select{font-size:13px;border-color:var(--sand7);background:var(--paper);min-height:38px}
+html.yohaku-design .refined .result-card,html.yohaku-design .refined .term-card,html.yohaku-design .refined .note-card{border-radius:12px;border-color:var(--sand6);padding:22px 24px;background:var(--paper);box-shadow:var(--ui-shadow)}
+html.yohaku-design .refined .result-source{font-size:12px;color:var(--sage11)}
+html.yohaku-design .refined .result-source>span{font-size:12px;color:var(--sage11)}
+html.yohaku-design .refined .result-source>strong{font-size:14px;color:var(--jade12)}
+html.yohaku-design .refined .result-source small{font-size:11px}
+html.yohaku-design .refined .result-excerpt{font-size:calc(var(--reading-size) - 1px);line-height:1.95;margin-block:16px 6px}
+html.yohaku-design .refined .result-action{font-size:13px;margin-top:12px}
+html.yohaku-design mark{background:var(--amber4);color:var(--sage12);padding:1px 3px;border-radius:3px}
+html.yohaku-design .refined .note-excerpt{border-radius:8px;background:var(--amber2);border:1px solid var(--amber5);color:var(--sage12)}
+html.yohaku-design .refined .collection-search{border-radius:9px;border-color:var(--sand7);box-shadow:0 1px 2px #1b352a04;padding:4px 14px;min-height:48px}
+html.yohaku-design .refined .collection-search:focus-within{border-color:var(--jade8);box-shadow:0 0 0 3px var(--jade3)}
+html.yohaku-design .refined .collection-search input:focus-visible{outline:none;box-shadow:none}
+html.yohaku-design .refined .collection-search input{font-size:calc(var(--control-size) - 1px)}
+html.yohaku-design .refined .term-card h3{font-size:23px}
+html.yohaku-design .refined .term-card-heading>span{font-size:12px}
+html.yohaku-design .refined .term-card .term-body{font-size:calc(var(--reading-size) - 1px);line-height:1.95}
+html.yohaku-design .refined .empty{margin-top:12px;padding:34px 20px;border:1px dashed var(--sand7);border-radius:14px;background:#fffefa80;gap:14px}
+html.yohaku-design .refined .empty h2{font-size:20px;color:var(--jade12)}
+html.yohaku-design .refined .empty p{font-size:14px;line-height:1.9}
+html.yohaku-design .empty-illustration{display:block;width:210px;height:164px;object-fit:contain;margin:0 auto 4px}
+html.yohaku-design .refined .suggestions button{min-height:36px;font-size:13px;background:var(--paper);border:1px solid var(--sand7);border-radius:7px;padding:7px 12px}
+html.yohaku-design .refined .notice{border-radius:8px;font-size:14px;background:var(--amber2);border-color:var(--amber6);color:#665025}
+
+html.yohaku-design .modal-backdrop{background:#172b235c;backdrop-filter:blur(5px)}
+html.yohaku-design .upload-dialog,html.yohaku-design .term-dialog,html.yohaku-design .cloze-dialog{border:1px solid #ffffff90;border-radius:16px;background:var(--paper);box-shadow:0 24px 90px #13271c30}
+html.yohaku-design .refined .upload-dialog{padding:28px;max-width:720px}
+html.yohaku-design .refined .term-dialog{max-width:min(1120px,calc(100vw - 48px))}
+html.yohaku-design .dialog-top{padding-bottom:16px;border-bottom:1px solid var(--sand6)}
+html.yohaku-design .refined .upload-dialog h2{font-size:22px}
+html.yohaku-design .refined .backup-section{margin-top:20px;padding-top:20px}
+html.yohaku-design .refined .backup-section h3{font-size:15px;color:var(--jade12)}
+html.yohaku-design .refined .backup-section p{font-size:13px;line-height:1.9;color:var(--sage11)}
+html.yohaku-design .refined .backup-section>summary{font-size:15px;padding-bottom:4px;min-height:36px}
+html.yohaku-design .refined .backup-success{background:var(--jade3);border-color:var(--jade6);font-size:13px}
+
+html.yohaku-design .refined.is-reading .main-shell{margin-left:0}
+html.yohaku-design .refined .workspace.reading{max-width:1600px;padding:18px 28px 36px}
+html.yohaku-design .refined .reading-identity h1{font:700 15px/1.6 var(--sans)}
+html.yohaku-design .refined .reading-identity>span{font-size:11px}
+html.yohaku-design .refined:not(.is-fullscreen) .reader-commandbar{border-radius:12px 12px 0 0;border-top:1px solid var(--sand6);padding:10px 14px;gap:12px}
+html.yohaku-design .refined .reader-commandbar .button{font-size:13px;min-height:38px;padding:8px 12px}
+html.yohaku-design .refined .compact-pager input{border:1px solid var(--sand7);background:var(--sand2);color:var(--jade12);min-height:34px;font-size:14px;border-radius:6px}
+html.yohaku-design .refined .compact-pager form{font-size:12px;color:var(--sage11)}
+html.yohaku-design .refined .reader-grid{gap:18px}
+html.yohaku-design .refined .pdf-panel{border-radius:12px;border-color:var(--sand6);background:#eaece5}
+html.yohaku-design .refined .reader-tools-panel{border:1px solid var(--sand6);border-radius:12px;box-shadow:0 8px 40px #1b352a18;background:var(--paper)}
+html.yohaku-design .refined .reader-tools-panel h2{font-size:18px}
+html.yohaku-design .refined .reader-tools-panel h3{font-size:13px;color:var(--sage11);font-weight:700}
+html.yohaku-design .refined .reader-tools-panel select{font-size:13px;background:var(--paper);border-color:var(--sand7)}
+html.yohaku-design .refined .reader-tools-panel .button[aria-pressed="true"]{background:var(--jade3);color:var(--jade12);border-color:var(--jade7)}
+html.yohaku-design .refined .editor-panel{border-radius:12px;border-color:var(--sand6);padding:20px;box-shadow:var(--ui-shadow)}
+html.yohaku-design .refined .editor-panel textarea{font-size:15px;line-height:1.9;background:var(--sand1);border-color:var(--sand7);color:var(--ink)}
+html.yohaku-design .refined .editor-title>span:first-child{font-size:15px}
+html.yohaku-design .refined .save-status{font-size:11px;color:var(--jade11)}
+html.yohaku-design .refined .save-status.unsaved{color:#86601e}
+html.yohaku-design .refined .selection-tools{padding:10px 12px;border:1px solid var(--sage6);border-radius:12px;box-shadow:0 8px 30px #1b352a1a;background:var(--paper)}
+html.yohaku-design .refined .selection-tools>span{font-size:13px}
+html.yohaku-design .refined .selection-tools .button{font-size:13px;min-height:36px;padding:8px 12px}
+html.yohaku-design .refined .fullscreen-chrome-toggle{border:1px solid var(--sand7);border-radius:8px;background:#fffefae8;color:var(--jade12);backdrop-filter:blur(8px);box-shadow:0 2px 10px #1b352a0a}
+html.yohaku-design .refined.is-fullscreen .workspace.reading{padding:0;max-width:none}
+html.yohaku-design .refined.is-fullscreen .pdf-panel{border:0;border-radius:0}
+html.yohaku-design .refined.is-fullscreen .reader-grid{gap:0}
+html.yohaku-design .refined.is-fullscreen .editor-panel:not([hidden]){border-radius:0;box-shadow:none}
+
+html.yohaku-design .cloze-dialog{width:min(1120px,calc(100vw - 48px))}
+html.yohaku-design .cloze-dialog>header{padding:17px 24px;border-color:var(--sand6)}
+html.yohaku-design .cloze-dialog>header h2{font-size:20px;font-weight:700}
+html.yohaku-design .cloze-editor-body,html.yohaku-design .cloze-run-body{padding:20px 24px}
+html.yohaku-design .cloze-source{font-size:12px;color:var(--sage11);margin-bottom:12px}
+html.yohaku-design .cloze-name{font-size:12px;color:var(--sage11);margin-bottom:14px}
+html.yohaku-design .cloze-controls{border-radius:10px;border-color:var(--sand6);background:var(--sand3);padding:10px 12px;gap:16px;margin:12px 0 22px}
+html.yohaku-design .cloze-controls legend{font-size:12px;line-height:36px;color:var(--sage12)}
+html.yohaku-design .cloze-presets{gap:4px;padding:3px;background:var(--sand5);border-radius:8px}
+html.yohaku-design .refined .cloze-presets .button{min-height:30px;font-size:12px;padding:5px 9px;border:0;background:var(--paper);border-radius:5px;box-shadow:0 1px 2px #1b352a0a}
+html.yohaku-design .refined .cloze-presets .button:hover{background:var(--jade3)}
+html.yohaku-design .cloze-amount{gap:10px}
+html.yohaku-design .cloze-amount output{min-width:36px;font-size:12px;color:var(--jade12);font-variant-numeric:tabular-nums}
+html.yohaku-design .cloze-options{gap:8px}
+html.yohaku-design .cloze-options label{font-size:11px;color:var(--sage11)}
+html.yohaku-design .cloze-options select{min-height:34px;padding:6px 8px;font-size:12px;background:var(--paper);border-color:var(--sand7)}
+html.yohaku-design .refined .cloze-options .button{font-size:12px;min-height:34px;padding:7px 10px}
+html.yohaku-design .refined .cloze-options .text-button{font-size:12px;min-height:34px}
+html.yohaku-design .cloze-editor-columns{gap:20px}
+html.yohaku-design .cloze-editor-columns h3{font-size:14px;font-weight:700;color:var(--jade12);gap:8px;margin-bottom:6px}
+html.yohaku-design .cloze-editor-columns p{font-size:12px;line-height:1.8;margin-bottom:12px}
+html.yohaku-design .cloze-source-text,html.yohaku-design .cloze-preview{background:var(--paper);border:1px solid var(--sand6);border-radius:10px;color:var(--sage12);padding:20px;line-height:1.9}
+html.yohaku-design .cloze-editor-columns>section:last-child .cloze-preview{background:var(--jade2);border-color:var(--jade6)}
+html.yohaku-design .cloze-source-text.code,html.yohaku-design .cloze-preview.code{font-family:Consolas,'Yu Gothic UI',monospace;font-size:15px;line-height:1.65;letter-spacing:0}
+html.yohaku-design .cloze-word{box-shadow:inset 0 -1px var(--sand7);border-radius:3px}
+html.yohaku-design .cloze-word:hover{background:var(--jade3)}
+html.yohaku-design .cloze-word.is-hidden{background:var(--jade4);color:var(--jade12);box-shadow:inset 0 -2px var(--jade9)}
+html.yohaku-design .cloze-word:focus-visible{outline-color:var(--jade11)}
+html.yohaku-design .cloze-dialog>footer{border-color:var(--sand6);padding:15px 24px}
+html.yohaku-design .cloze-dialog>footer>.muted{font-size:11px;color:var(--sage11)}
+html.yohaku-design .cloze-answer-fields{gap:16px}
+html.yohaku-design .cloze-answer-fields label{font-size:13px;font-weight:600}
+html.yohaku-design .cloze-answer-fields textarea{font-size:15px;min-height:46px;background:var(--paper);border-color:var(--sand8);color:var(--ink)}
+html.yohaku-design .cloze-answer-fields textarea:disabled{opacity:1;background:var(--sand2)}
+html.yohaku-design .cloze-correct{color:var(--jade11)}
+html.yohaku-design .cloze-review{color:var(--tomato11)}
+html.yohaku-design .cloze-feedback{padding:18px;border:1px solid var(--jade6);background:var(--jade2);border-radius:10px;color:var(--jade12)}
+html.yohaku-design .cloze-feedback strong{font-size:18px}
+html.yohaku-design .cloze-card{padding:23px 24px;border-color:var(--sand6);border-radius:12px;box-shadow:var(--ui-shadow)}
+html.yohaku-design .cloze-card-top>span{font-size:12px;color:var(--sage11)}
+html.yohaku-design .cloze-card h2{font-size:20px;margin:14px 0 10px}
+html.yohaku-design .cloze-card>.muted{font-size:13px}
+html.yohaku-design .cloze-card-actions{border-top:1px solid var(--sand6);padding-top:16px;margin-top:18px;gap:18px}
+html.yohaku-design .cloze-shelf>.muted{font-size:14px;line-height:1.9;margin-bottom:22px}
+html.yohaku-design .practice-setup,html.yohaku-design .practice-question{border-color:var(--sand6);background:var(--paper);border-radius:12px;box-shadow:var(--ui-shadow)}
+html.yohaku-design .practice-intro{font-size:16px;line-height:1.9}
+html.yohaku-design .practice-fields select{background:var(--paper);border-color:var(--sand7);font-size:14px}
+html.yohaku-design .practice-feedback.correct{background:var(--jade2);border-color:var(--jade8)}
+
+@media(min-width:1550px){html.yohaku-design .refined .workspace:not(.reading){padding-top:46px}html.yohaku-design .design-books{gap:18px}html.yohaku-design .refined .design-books .textbook-row{min-height:182px;padding:22px 24px;grid-template-columns:84px minmax(0,1fr);column-gap:22px}html.yohaku-design .book-cover{width:84px}html.yohaku-design .book-cover img{width:84px;height:118px}html.yohaku-design .design-books .textbook-info h3{font-size:16px}}
+@media(max-width:1080px){html.yohaku-design .refined .workspace{padding-inline:28px}html.yohaku-design .design-books{grid-template-columns:1fr}html.yohaku-design .refined .design-books .textbook-row{min-height:144px;grid-template-columns:68px minmax(0,1fr);padding:16px 20px;row-gap:8px}html.yohaku-design .book-cover{width:68px;min-height:96px}html.yohaku-design .book-cover img{width:68px;height:96px}}
+@media(max-width:900px){html.yohaku-design .cloze-controls{gap:12px}html.yohaku-design .cloze-options{justify-content:flex-start}html.yohaku-design .cloze-dialog{width:calc(100vw - 32px)}html.yohaku-design .cloze-editor-columns{gap:24px}}
+@media(max-width:700px){
+  html.yohaku-design .refined .sidebar{width:248px;transform:translateX(-100%)}
+  html.yohaku-design .refined .sidebar.mobile-open{transform:translateX(0)}
+  html.yohaku-design .refined .main-shell{margin-left:0}
+  html.yohaku-design .refined .workspace{padding:18px 18px 40px}
+  html.yohaku-design .refined .workspace.reading{padding:8px 10px 24px}
+  html.yohaku-design .refined h1{font-size:26px}
+  html.yohaku-design .refined .page-heading{margin-bottom:20px;gap:12px}
+  html.yohaku-design .library-lead{font-size:11px}
+  html.yohaku-design .refined .page-heading>.button{font-size:12px;min-height:38px;padding:8px 11px}
+  html.yohaku-design .refined .search-box input{font-size:16px}
+  html.yohaku-design .refined .search-box input::placeholder{font-size:12px}
+  html.yohaku-design .refined .search-box kbd{display:none}
+  html.yohaku-design .refined .design-books .textbook-row{grid-template-columns:62px minmax(0,1fr);padding:16px;column-gap:16px}
+  html.yohaku-design .book-cover{width:62px}
+  html.yohaku-design .book-cover img{width:62px;height:88px}
+  html.yohaku-design .design-books .textbook-info h3{font-size:14px}
+  html.yohaku-design .refined .continue-card{padding:18px;gap:12px}
+  html.yohaku-design .continue-card strong{font-size:15px}
+  html.yohaku-design .continue-card>span>span{font-size:11px}
+  html.yohaku-design .cloze-dialog{width:calc(100vw - 20px);max-height:calc(100dvh - 20px);border-radius:12px}
+  html.yohaku-design .cloze-dialog>header{padding:13px 16px}
+  html.yohaku-design .cloze-dialog>header h2{font-size:18px}
+  html.yohaku-design .cloze-editor-body,html.yohaku-design .cloze-run-body{padding:16px}
+  html.yohaku-design .cloze-dialog>footer{padding:12px 16px}
+  html.yohaku-design .refined .upload-dialog{padding:20px}
+  html.yohaku-design .cloze-source-text,html.yohaku-design .cloze-preview{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){html.yohaku-design *,html.yohaku-design *::before,html.yohaku-design *::after{transition:none!important;scroll-behavior:auto!important}}
+
+html.yohaku-design .brand.public-brand>span:last-child{font-size:22px;letter-spacing:0;white-space:nowrap}

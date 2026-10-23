@@ -1,0 +1,5 @@
+export type PracticeResult={id:string;questionId:string;bookId:string;holes:number[];answers:string[];correct:boolean[];revealed:boolean;createdAt:string};
+export type PracticeSession={id:string;bookId:string;scope:string;holeCount:number;order:{id:string;holes:number[]}[];index:number;draft:string[];draftAt?:number;result:PracticeResult|null;updatedAt:string};
+export type PracticeState={session:PracticeSession|null;results:PracticeResult[]};
+export type PracticeQuestion={id:string;file:string;sourceBookId?:string;page:number;blockId:string;lineStart:number;code:string;hints:string[];expected?:string[];explanations?:string[];sourceCode?:string};
+export type PracticeData={decks:{bookId:string;title:string;count:number;scopes:string[]}[];session:Omit<PracticeSession,'order'> & {total:number;round:{completed:number;unaided:number;revealed:number};question:PracticeQuestion|null}|null;summary:{completed:number;unaided:number;revealed:number;latest:{questionId:string;bookId:string;correct:boolean;file:string;sourceBookId?:string;page:number;blockId:string}[]}};

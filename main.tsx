@@ -1,0 +1,11 @@
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import StudyApp from './app/study-app';
+import './app/globals.css';
+import './app/practice.css';
+import './app/folders.css';
+import './app/design-review.css';
+import './app/book-completion.css';
+if(__YOHAKU_BOOK_DESIGN__)document.documentElement.classList.add('yohaku-design');
+if(__YOHAKU_DESIGN_REVIEW__)document.title='余白 | デザイン確認版';
+createRoot(document.getElementById('root')!).render(<StudyApp/>);

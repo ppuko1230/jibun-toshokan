@@ -1,0 +1,76 @@
+/* Paper edges encode position; PDF canvases and text remain the original pages. */
+/* The reader owns one viewport. Only an enlarged PDF scrolls inside it. */
+html.yohaku-design .refined .workspace.reading:has(.book-stage){height:100dvh;min-height:0;display:flex;flex-direction:column;padding-bottom:18px}
+html.yohaku-design .refined .reader-grid:has(.book-stage){flex:1;min-height:0;position:relative;grid-template-rows:minmax(0,1fr)}
+html.yohaku-design .refined .pdf-panel:has(.book-stage){display:flex;flex-direction:column;min-height:0;height:100%}
+html.yohaku-design .refined .reader-grid:has(.book-stage)>.editor-panel:not([hidden]){min-height:0;max-height:100%;overflow:auto}
+html.yohaku-design .refined .book-viewer{display:flex;flex:1 1 0;min-height:0;position:relative;isolation:isolate;background:#e9ece6;padding-left:104px;padding-right:52px}
+html.yohaku-design .refined .book-stage{height:auto;min-height:0;min-width:0;flex:1 1 0;padding:24px 12px;gap:0;overflow:auto;background:#e9ece6;overscroll-behavior:contain;position:relative}
+html.yohaku-design .refined.is-fullscreen .book-stage{height:auto;min-height:0;padding:24px 12px;flex:1 1 0}
+html.yohaku-design .refined.is-fullscreen .workspace.reading:has(.book-stage){padding:0}
+.book-model{flex:none;margin:0 auto;color:var(--sage11)}
+.book-paper-body{display:flex;align-items:stretch;box-shadow:0 10px 14px #203b2818;position:relative}
+.book-page-preview{position:absolute;pointer-events:none;user-select:none;color:var(--sage11);z-index:3}
+.book-preview-caption{display:flex;align-items:center;justify-content:center;gap:7px;font:12px/1.5 var(--sans);color:var(--sage11);padding:4px 8px}
+.book-preview-caption small{font-size:11px}
+.book-sheet.is-active .book-preview-caption{color:var(--jade12)}
+.book-board{flex:none;width:6px;background:var(--jade12);border-radius:3px;margin-block:-4px;box-shadow:0 2px 3px #102e2220}
+.book-paper-edge{display:flex;flex:none;align-self:stretch;background:#eeeade;border-block:1px solid #c5c5b7;overflow:hidden}
+.book-paper-edge.left{border-radius:3px 0 0 3px}
+.book-paper-edge.right{border-radius:0 3px 3px 0}
+.book-paper-edge>span{flex:1;border-right:1px solid #b9beae;border-left:1px solid #fffefa;min-width:2px}
+.book-page-unit{display:flex;align-items:stretch;flex:none}
+.book-gutter{flex:none;width:12px;background:#dadfd4;border-inline:1px solid #b9c5b8}
+.book-sheet{flex:none;background:white;box-shadow:0 0 0 1px #c4cbbf;position:relative}
+html.yohaku-design .refined .book-sheet .pdf-paper{margin:0;box-shadow:none}
+.pdf-render-frame{position:absolute;left:0;top:0;transform-origin:0 0}
+.pdf-text-host{position:absolute;inset:0}
+.book-stage[data-pan-ready="true"],.book-stage[data-pan-ready="true"] .textLayer,.book-stage[data-pan-ready="true"] .textLayer span{cursor:grab;user-select:none}
+.book-stage[data-panning="true"],.book-stage[data-panning="true"] *{cursor:grabbing!important;user-select:none!important}
+.book-pointer-help{position:absolute;left:8px;top:12px;z-index:5;width:84px;display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 6px;border:1px solid var(--sage6);border-radius:10px;background:var(--sand1);color:var(--sage11);pointer-events:none;user-select:none}
+.book-pointer-help>span{display:flex;flex-direction:column;align-items:center;gap:5px}
+.book-pointer-help>span>span{display:flex;flex-direction:column;gap:2px;font:11px/1.35 var(--sans);text-align:center;white-space:nowrap}
+.book-pointer-help strong{font-size:11px;font-weight:650;color:var(--jade12)}
+.mouse-button-icon{flex:none;color:var(--jade10)}
+@media(max-width:640px){.book-pointer-help{left:4px;width:76px;gap:12px;padding:8px 4px}.mouse-button-icon{width:20px;height:27px}}
+.book-sheet .textLayer{z-index:1}
+.book-sheet-caption{height:32px;background:var(--sand2);border-top:1px solid var(--sand5);display:flex;justify-content:center}
+.book-sheet-caption button{border:0;background:transparent;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;font:12px/1.5 var(--sans);color:var(--sage11);padding:4px 8px}
+.book-sheet-caption button span{font-size:11px}
+.book-sheet-caption button:hover{background:var(--jade3);color:var(--jade12)}
+.book-sheet.is-active .book-sheet-caption{background:var(--jade3)}
+.book-sheet.is-active .book-sheet-caption button{color:var(--jade12)}
+.book-side-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:44px;height:52px;display:grid;place-items:center;padding:0;border:1px solid var(--sage6);border-radius:14px;background:var(--sand1);color:var(--jade12);box-shadow:0 3px 10px #203b2810;cursor:pointer;touch-action:manipulation}
+.book-side-nav.previous{left:var(--book-nav-inset)}
+.book-side-nav.next{right:var(--book-nav-inset)}
+.book-side-nav:hover:not(:disabled){background:var(--jade3);border-color:var(--jade8)}
+.book-side-nav:focus-visible{outline:3px solid var(--jade9);outline-offset:3px}
+.book-side-nav:disabled{opacity:.32;cursor:default;box-shadow:none}
+html.yohaku-design .refined .pdf-layout-toggle{background:var(--jade2);border-color:var(--jade6)}
+@media(max-width:760px){html.yohaku-design .refined .book-stage,html.yohaku-design .refined.is-fullscreen .book-stage{padding:18px 12px}.book-sheet-caption button span{display:none}}
+@media(max-width:900px){html.yohaku-design .refined .reader-grid:has(.book-stage)>.editor-panel:not([hidden]){position:absolute;right:0;top:0;bottom:0;width:min(360px,calc(100% - 24px));z-index:42;box-shadow:-8px 0 30px #263e2724}}
+/* Only the temporary page images turn. Controls and selectable text never rotate. */
+.book-turn-layer{position:absolute;inset:0;pointer-events:none;z-index:4;perspective:1800px;isolation:isolate;overflow:clip}
+.book-turn-stationary{position:absolute;object-fit:fill;animation:book-stationary 280ms linear both}
+.book-turn-leaf{position:absolute;transform-style:preserve-3d;pointer-events:none;will-change:transform}
+.book-turn-layer.forward .book-turn-leaf{transform-origin:left center;animation:book-turn-forward 280ms cubic-bezier(.35,.05,.25,1) both}
+.book-turn-layer.backward .book-turn-leaf{transform-origin:right center;animation:book-turn-backward 280ms cubic-bezier(.35,.05,.25,1) both}
+.book-turn-face{position:absolute;inset:0;backface-visibility:hidden;background:#fff;overflow:hidden;box-shadow:0 3px 15px #172b2726}
+.book-turn-face.back{transform:rotateY(180deg)}
+.book-turn-face canvas{position:absolute;top:0;left:var(--turn-inset);width:var(--turn-paper-width);height:100%;object-fit:fill}
+.book-turn-face span{position:absolute;inset:0;background:linear-gradient(90deg,#24382c33,transparent 32%,transparent 75%,#24382c10);animation:book-turn-shade 280ms ease both}
+.book-paper-body[data-page-arrival="forward"]{transform-origin:left center;animation:book-page-arrive 180ms ease-out both}
+.book-paper-body[data-page-arrival="backward"]{transform-origin:right center;animation:book-page-arrive 180ms ease-out both}
+@keyframes book-turn-forward{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}
+@keyframes book-turn-backward{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}
+@keyframes book-stationary{0%,44%{opacity:1}45%,100%{opacity:0}}
+@keyframes book-turn-shade{0%,100%{opacity:0}40%,65%{opacity:1}}
+@keyframes book-page-arrive{from{transform:perspective(1400px) rotateY(8deg)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){.book-turn-layer:not([data-motion="on"]){display:none}.book-paper-body:not([data-motion="on"])[data-page-arrival]{animation:none}}
+.book-turn-layer[data-motion="on"] .book-turn-leaf,.book-turn-layer[data-motion="on"] .book-turn-stationary,.book-turn-layer[data-motion="on"] .book-turn-face span{animation-duration:280ms!important}
+.book-paper-body[data-motion="on"][data-page-arrival]{animation-duration:180ms!important}
+.reader-page-motion{display:grid;gap:7px;margin-top:14px;font-size:13px;color:var(--muted)}
+html.yohaku-design .reader-zoom-tools{flex-wrap:wrap}
+html.yohaku-design .reader-zoom-tools>span{flex-basis:100%}
+
+.book-model[hidden]{display:none}

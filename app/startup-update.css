@@ -1,0 +1,11 @@
+.startup-update-notice{position:fixed;right:24px;bottom:24px;z-index:5000;display:flex;align-items:flex-start;gap:14px;width:min(360px,calc(100vw - 32px));padding:20px;background:#fffef8;color:#203e31;border:1px solid #cdd8c9;border-radius:16px;box-shadow:0 10px 40px #153e2924;font-size:14px;line-height:1.7}
+.startup-update-notice>svg{margin-top:3px;flex-shrink:0;color:#35664c}
+.startup-update-notice>div{flex:1;min-width:0}
+.startup-update-notice strong{font-size:14px;font-weight:700}
+.startup-update-notice p{margin:4px 0 10px;color:#607363;font-size:12px}
+.startup-update-notice .text-button{font-size:13px;font-weight:700;color:#24593e}
+.startup-update-notice>.icon-button{margin:-8px -10px 0 0;flex-shrink:0;color:#69776b}
+.startup-update-notice[hidden],.app-shell:has([data-usage-guide]) .startup-update-notice{display:none}
+.startup-update-preference{display:flex;align-items:center;gap:9px;margin:16px 0 8px;font-size:14px;line-height:1.7}
+.startup-update-preference input{accent-color:#24593e;width:16px;height:16px;flex-shrink:0}
+@media(max-width:520px){.startup-update-notice{right:16px;bottom:16px;padding:16px;gap:10px}}

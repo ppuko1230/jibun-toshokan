@@ -1,0 +1,14 @@
+.book-completion{display:inline-flex;align-items:center;gap:8px;min-height:34px;margin-top:9px;padding:3px 8px 3px 2px;font-size:13px;line-height:1.5;color:#526459;cursor:pointer;border-radius:6px}
+.book-completion input{width:18px;height:18px;margin:0;accent-color:#28724f;flex:none;cursor:pointer}
+.book-completion:hover{background:#e7f1e9}.book-completion:has(input:focus-visible){outline:2px solid #28724f;outline-offset:3px}.book-completion:has(input:disabled){cursor:wait;opacity:.65}
+.book-completion.is-complete{color:#245d40;font-weight:600}
+.textbook-row.is-complete{background:#edf7ef;border-color:#8bb89a;box-shadow:inset 4px 0 #3a8258}
+html.yohaku-design .refined .design-books .textbook-row.is-complete{background:#edf7ef;border-color:#8bb89a;box-shadow:inset 4px 0 #3a8258}
+.completion-summary{display:flex;gap:6px;align-items:center;color:#3c6c4e;font-size:13px;line-height:1.7;margin:0}
+.shelf-heading{flex-wrap:wrap;gap:12px}
+.book-status-filter{display:flex;flex-wrap:wrap;gap:3px;padding:3px;border:1px solid #ccd9ce;border-radius:9px;background:#edf2eb}
+.book-status-filter button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:6px 12px;border:1px solid transparent;border-radius:6px;background:transparent;color:#53685a;font:inherit;font-size:13px;white-space:nowrap}
+.book-status-filter button:hover{background:#e1ebe0}.book-status-filter button[aria-pressed="true"]{background:#244f3b;border-color:#244f3b;color:#fff}
+.book-status-filter button span{font-size:11px;line-height:1.5;min-width:16px;font-variant-numeric:tabular-nums}
+@media(max-width:700px){.book-status-filter{order:3;flex-basis:100%}.book-status-filter button{flex:1;min-height:40px}.shelf-heading .completion-summary{margin-left:auto}}
+@media(max-width:700px){.completion-summary{font-size:12px}.book-completion{font-size:12px;min-height:38px}}

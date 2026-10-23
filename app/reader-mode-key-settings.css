@@ -1,0 +1,6 @@
+.mode-key-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:12px 0}
+.mode-key-row>span{display:flex;align-items:center;gap:9px;font-size:14px;min-width:0}
+.mode-key-row svg{flex:none;color:var(--jade11)}
+.mode-key-button{min-width:96px;max-width:56%;justify-content:center;overflow-wrap:anywhere}
+.mode-key-settings>.text-button{margin-top:8px}
+@media(max-width:420px){.mode-key-row{gap:8px}.mode-key-row>span{font-size:12px}.mode-key-button{min-width:64px}}

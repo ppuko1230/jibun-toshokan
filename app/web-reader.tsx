@@ -1,0 +1,61 @@
+import {useEffect,useLayoutEffect,useRef,useState} from 'react';
+import {Flag,Check} from 'lucide-react';
+import {createPortal} from 'react-dom';
+import {TermSurface,type TermActions} from './term-ui';
+import CodeView from './code-view';
+import {challengeLabels,type Challenge,type WebBlock,type WebPageData,type WebPreferences,type ContinuousFile} from './lib/web-types';
+
+function FileExplanation({block,page,bookId,actions,challenge}:{block:WebBlock;page:number;bookId:string;actions:TermActions;challenge?:Challenge}){
+  const textRoot=useRef<HTMLDivElement>(null),source={bookId,page,blockId:block.id};
+  return <section className="web-file-explanation" data-source-page={page}><div className="web-block-actions"><button className={'web-mark '+(challenge?'marked':'')} onClick={()=>actions.mark?.(block.title||block.code!.slice(0,2000),source,challenge)}><Flag size={16}/>{challenge?challengeLabels[challenge.kind]:'課題を付ける'}</button></div><p className="web-source-note">{block.lineStart}–{block.lineEnd}行 · PDF {page}ページ</p><TermSurface textRoot={textRoot} revision={block.id} actions={actions} source={source}><div ref={textRoot}><h3>{block.title}</h3><p className="web-paragraph">{block.text}</p></div></TermSurface><button className="text-button" onClick={()=>document.getElementById(block.id)?.scrollIntoView({block:'center',behavior:'smooth'})}>コードの該当箇所へ</button></section>;
+}
+
+function FileReading({file,bookId,actions,challenges,go}:{file:ContinuousFile;bookId:string;actions:TermActions;challenges:Challenge[];go:(page:number,fileName?:string)=>void}){
+  const textRoot=useRef<HTMLPreElement>(null),[copied,setCopied]=useState(false),[copyError,setCopyError]=useState('');
+  const first=file.segments[0],code=file.segments.map(s=>s.block.code).join('\n'),explanations=file.segments.filter(s=>s.block.type==='pair');
+  const marked=(page:number,id:string)=>challenges.find(c=>c.bookId===bookId&&c.page===page&&(c.blockId===id||file.segments.find(s=>s.block.id===id)?.block.legacyIds?.includes(c.blockId||''))&&c.status==='open');
+  useEffect(()=>{setCopied(false);setCopyError('');},[file.name]);
+  return <div className="web-file-reading">
+    <div className="web-file-bar"><span>{code.split('\n').length}行 · 元のPDF {file.firstPage}{file.lastPage!==file.firstPage?'–'+file.lastPage:''}ページ</span><button className="text-button" onClick={async()=>{try{await navigator.clipboard.writeText(code);setCopied(true);setCopyError('');}catch{setCopyError('コピーできませんでした。コードを選択してコピーしてください。');}}}>{copied?'コピーしました':'コード全体をコピー'}</button></div>
+    {copyError&&<p role="alert" className="web-source-note">{copyError}</p>}
+    <div data-block-id={'file-'+file.name} className="web-file-code">
+      <TermSurface textRoot={textRoot} revision={file.name} actions={actions} source={{bookId,page:first.page,blockId:first.block.id}}>
+        <CodeView codeRef={textRoot} file={file.name} label={file.name+' のコード全体'} continuous segments={file.segments.map(({page,block})=>({id:block.id,page,code:block.code!,legacyIds:block.legacyIds,marked:!!marked(page,block.id)}))}/>
+      </TermSurface>
+    </div>
+    <p className="web-file-hint">コードを選択すると、虫食い練習・用語メモ・学習の課題を作れます。</p>
+    {explanations.length>0&&<details className="web-file-explanations"><summary>このファイルの解説 <span>{explanations.length}項目</span></summary>{explanations.map(({page,block})=><FileExplanation key={block.id} block={block} page={page} bookId={bookId} actions={actions} challenge={marked(page,block.id)}/>)}</details>}
+    <nav className="web-file-navigation" aria-label="コードファイルの移動"><button className="button small" disabled={!file.previousPage} onClick={()=>go(file.previousPage!,file.previousFile)}>前のファイル</button><button className="button small" disabled={!file.nextPage} onClick={()=>go(file.nextPage!,file.nextFile)}>次のファイル</button></nav>
+  </div>;
+}
+
+function ReadingBlock({block,bookId,page,actions,challenges,fullFile,go}:{fullFile?:ContinuousFile;go:(page:number,fileName?:string)=>void;block:WebBlock;bookId:string;page:number;actions:TermActions;challenges:Challenge[]}){
+  const textRoot=useRef<HTMLDivElement>(null);
+  const marked=challenges.find(c=>c.bookId===bookId&&c.page===page&&(c.blockId===block.id||block.legacyIds?.includes(c.blockId||''))&&c.status==='open');
+  const source={bookId,page,blockId:marked?.blockId||block.id};
+  return <section id={block.id} data-block-id={block.id} data-block-aliases={block.legacyIds?.join(' ')} className={'web-block '+(block.type==='heading'?'is-heading ':'')+(marked?'has-challenge':'')}>
+    <div className="web-block-actions"><button className={'web-mark '+(marked?'marked':'')} onClick={()=>actions.mark?.(block.title||block.text.slice(0,2000),source,marked)} aria-label={(marked?challengeLabels[marked.kind]+'：':'課題を付ける：')+(block.title||block.text.slice(0,35))}><Flag size={16}/>{marked?challengeLabels[marked.kind]:'課題を付ける'}</button></div>
+    <TermSurface textRoot={textRoot} revision={block.id+block.text+block.code} actions={actions} source={source}>
+      <div ref={textRoot}>
+        {fullFile?<div className="web-full-file-card"><div><strong>{fullFile.name}</strong><span>全{fullFile.segments.at(-1)!.block.lineEnd}行 · PDF {fullFile.firstPage}{fullFile.lastPage!==fullFile.firstPage?'–'+fullFile.lastPage:''}ページ</span></div><button className="button small" onClick={()=>go(fullFile.firstPage,fullFile.name)}>全文を読む</button></div>:block.type==='pair'?<><h3>{block.title}</h3><div className="web-code-pair"><div className="web-code-column"><div className="web-code-label">{block.file}<span>{block.lineStart}–{block.lineEnd}行</span></div><CodeView segments={[{code:block.code!}]} file={block.file} startLine={block.lineStart}/></div><p className="web-explanation">{block.text}</p></div></>:block.type==='heading'?<div className="web-section-heading"><h3>{block.text}</h3>{block.meta&&<div className="web-question-meta">{block.meta.map(meta=><span key={meta}>{meta}</span>)}</div>}</div>:block.type==='table'?<div className="web-table-scroll"><table className="web-content-table"><thead><tr>{block.rows?.[0].map((cell,i)=><th key={i} scope="col">{cell}</th>)}</tr></thead><tbody>{block.rows?.slice(1).map((row,i)=><tr key={i}>{row.map((cell,j)=><td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>:block.type==='code'?<div className="web-code-column">{block.file&&<div className="web-code-label">{block.file}<span>{block.lineStart}–{block.lineEnd}行</span></div>}<CodeView segments={[{code:block.text}]} file={block.file} startLine={block.lineStart}/></div>:<p className="web-paragraph">{block.text}</p>}
+      </div>
+    </TermSurface>
+  </section>;
+}
+
+export default function WebReader({toolsHost,fileName,bookId,page,actions,challenges,preferences,setPreferences,preferencesBusy,go,onReady,focusBlock}:{toolsHost?:HTMLElement|null;fileName?:string;bookId:string;page:number;actions:TermActions;challenges:Challenge[];preferences:WebPreferences;setPreferences:(p:WebPreferences)=>void;preferencesBusy:boolean;go:(page:number,fileName?:string)=>void;onReady:()=>void;focusBlock?:string}){
+  const [data,setData]=useState<WebPageData|null>(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
+  const readyCallback=useRef(onReady);readyCallback.current=onReady;
+  const loaded=data?.page===page;
+  useEffect(()=>{let cancelled=false;setError('');fetch('/api/web-books/'+encodeURIComponent(bookId)+'?page='+page,{cache:'no-store'}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error);if(!cancelled)setData(d);}).catch(e=>{if(!cancelled)setError(e.message||'本文を読み込めませんでした。');});return()=>{cancelled=true;};},[bookId,page,attempt]);
+  const activeFile=data?.files?.find(file=>fileName?file.name===fileName:focusBlock?file.segments.some(s=>s.block.id===focusBlock||s.block.legacyIds?.includes(focusBlock)):bookId==='ue5-vol1-v2'&&file.segments.some(s=>s.page===page));
+  const displayFile=data?.continuousFile||activeFile;
+  const displayBlocks=data?.blocks.filter((block,index,blocks)=>{const file=data.files?.find(f=>f.segments.some(s=>s.block.id===block.id));return !file||blocks.findIndex(b=>file.segments.some(s=>s.block.id===b.id))===index;});
+  useLayoutEffect(()=>{if(loaded){const url=new URL(location.href);if(activeFile)url.searchParams.set('file',activeFile.name);else url.searchParams.delete('file');history.replaceState(null,'',url.pathname+url.search);readyCallback.current();}},[loaded,data,focusBlock,activeFile?.name]);
+  const chapter=data?.chapters.filter(c=>c.page<=page).at(-1);
+  return <div className="term-text-scroll web-reading" data-theme={preferences.theme} data-page-title={loaded?data.title:undefined} data-context-page={loaded?displayFile?.contextPage:undefined} data-file={loaded?activeFile?.name:undefined} data-previous-file={loaded?activeFile?.previousFile:undefined} data-next-file={loaded?activeFile?.nextFile:undefined} data-previous-file-page={loaded?activeFile?.previousPage:undefined} data-next-file-page={loaded?activeFile?.nextPage:undefined} data-first-page={loaded?displayFile?.firstPage:undefined} data-last-page={loaded?displayFile?.lastPage:undefined} aria-busy={!loaded} style={{'--web-size':preferences.size+'px','--web-leading':preferences.lineHeight} as React.CSSProperties}>
+    {toolsHost&&createPortal(<section className="reader-tool-section reader-web-controls"><h3>読む場所・読みやすさを変える</h3><div className="web-reading-tools"><label>章を移動する<select aria-label="章を移動する" value={chapter?.page||''} onChange={e=>go(Number(e.target.value))} disabled={!loaded}><option value="" disabled>移動先を選択</option>{data?.chapters.map((c,i)=><option key={c.page+':'+i} value={c.page}>{c.title} · {c.page}</option>)}</select></label>{data?.files&&<label>コードファイルの全文を読む<select aria-label="コードファイルの全文を読む" value={activeFile?.name||''} disabled={!loaded} onChange={e=>{const file=data.files!.find(f=>f.name===e.target.value);if(file)go(file.firstPage,file.name);}}><option value="" disabled>全文を読むファイルを選択</option>{data.files.map(file=><option key={file.name} value={file.name}>{file.name} · {file.segments.at(-1)!.block.lineEnd}行</option>)}</select></label>}{activeFile&&<button className="button small web-context-return" onClick={()=>go(activeFile.contextPage||activeFile.firstPage)}>本文のページに戻る</button>}</div><fieldset className="web-settings"><legend className="sr-only">Web本文の表示設定</legend><label>文字の大きさを変える<select aria-label="文字の大きさを変える" value={preferences.size} disabled={preferencesBusy} onChange={e=>setPreferences({...preferences,size:Number(e.target.value)})}>{[18,20,22,24,26].map(n=><option key={n} value={n}>{n}px</option>)}</select></label><label>行間を変える<select aria-label="行間を変える" value={preferences.lineHeight} disabled={preferencesBusy} onChange={e=>setPreferences({...preferences,lineHeight:Number(e.target.value)})}><option value={1.7}>標準</option><option value={1.95}>ゆったり</option><option value={2.2}>広め</option></select></label><label>背景色を変える<select aria-label="背景色を変える" value={preferences.theme} disabled={preferencesBusy} onChange={e=>setPreferences({...preferences,theme:e.target.value as WebPreferences['theme']})}><option value="paper">生成り</option><option value="white">白</option><option value="night">夜</option></select></label><span><Check size={15}/>このPCに保存</span></fieldset></section>,toolsHost)}
+    {error?<div className="notice" role="alert">{error}<button className="text-button" onClick={()=>setAttempt(n=>n+1)}>再読み込み</button></div>:!loaded?<div className="web-loading" role="status">本文を読み込んでいます…</div>:null}
+    {data&&<article className={'web-article '+(displayFile?'is-code-file':'')} aria-label="Web本文" style={{visibility:loaded?'visible':'hidden'}}><header>{chapter?.title&&chapter.title!==(displayFile?.name||data.title.replace('（続き）',''))&&<p className="web-chapter-label">{chapter.title}</p>}<h2>{displayFile?.name||data.title}</h2>{!data.exactCode&&!data.structured&&<p className="web-source-note">{__YOHAKU_BOOK_DESIGN__?'図表や元の配置は、上の表示方法からPDFを選ぶと確認できます。':'図表や元の配置は、ツールの「PDF原本を読む」で確認できます。'}</p>}</header>{displayFile?<FileReading key={displayFile.name} file={displayFile} bookId={bookId} actions={actions} challenges={challenges} go={go}/>:displayBlocks?.map(block=><ReadingBlock key={block.id} block={block} bookId={bookId} page={page} actions={actions} challenges={challenges} go={go} fullFile={data.files?.find(file=>file.segments.some(s=>s.block.id===block.id))}/>)}</article>}
+  </div>;
+}
